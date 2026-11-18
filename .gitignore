@@ -1,0 +1,110 @@
+# ==============================================================================
+# Git Ignore - Karla & Jimmy Netflix Tribute
+# Architecture & Rules Reference:
+# - docs/ADR-001-architecture.md (Zero-build vanilla stack, Cloudflare Pages)
+# - docs/PROJECT-RULES.md (Zero external dependencies, static asset structure)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Operating System Files
+# ------------------------------------------------------------------------------
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+
+# ------------------------------------------------------------------------------
+# Editor & IDE Directories
+# ------------------------------------------------------------------------------
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains (WebStorm, IntelliJ IDEA, etc.)
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim / Emacs / General Editor Swap & Backup Files
+*.swp
+*.swo
+*.bak
+*.orig
+*~
+\#*\#
+.\#*
+
+# ------------------------------------------------------------------------------
+# Deployment & Hosting (Cloudflare Pages / Wrangler)
+# ------------------------------------------------------------------------------
+.cloudflare/
+.wrangler/
+dist/
+build/
+out/
+
+# ------------------------------------------------------------------------------
+# Dependencies & Package Managers (Zero-Dependency Guardrails)
+# Although this project strictly uses native Vanilla HTML5/CSS3/ES6+ JS,
+# prevent accidental commits if local preview servers or node utilities are run.
+# ------------------------------------------------------------------------------
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# ------------------------------------------------------------------------------
+# Environment Variables & Secrets
+# ------------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+*.env
+
+# ------------------------------------------------------------------------------
+# Raw Media / Design Source Files
+# Production assets should be standardized WebP / MP3 per ADR-001.
+# Ignore unoptimized working files and camera raw formats.
+# ------------------------------------------------------------------------------
+*.psd
+*.ai
+*.raw
+*.cr2
+*.nef
+*.arw
+*.dng
+*.xcf
+
+# ------------------------------------------------------------------------------
+# Logs & Temporary Files
+# ------------------------------------------------------------------------------
+*.log
+logs/
+tmp/
+temp/
+.temp/
