@@ -120,13 +120,22 @@ export function playAudio() {
         updateAudioUI();
 
         // Listen for next user gesture across the document
-        const handleGesture = () => {
+        // Gesture events accepted by browser autoplay policy:
+        // - 'click', 'keydown', 'touchend' — universally accepted (Chrome + Safari)
+        // - 'wheel'      — accepted by Chrome as user gesture for media; covers desktop scroll
+        // - 'touchstart' — accepted by Safari/iOS for mobile scroll
+        // All listeners are cleaned up together via AbortController once audio starts.
+        const ac = new AbortController();
+        const { signal } = ac;
+
+        const onGesture = () => {
           if (!userMutedExplicitly && audioElement && audioElement.paused) {
             audioElement.muted = false;
             audioElement
               .play()
               .then(() => {
                 isAudioUnlocked = true;
+                ac.abort(); // remove all remaining fallback listeners
                 hideAudioPrompt();
                 updateAudioUI();
               })
@@ -134,10 +143,12 @@ export function playAudio() {
           }
         };
 
-        // Use 'click' and 'touchend' - universally accepted across WebKit/Safari and Blink/Chrome
-        document.addEventListener('click', handleGesture, { once: true });
-        document.addEventListener('touchend', handleGesture, { once: true });
-        document.addEventListener('keydown', handleGesture, { once: true });
+        document.addEventListener('click',      onGesture, { signal });
+        document.addEventListener('keydown',    onGesture, { signal });
+        document.addEventListener('touchend',   onGesture, { signal });
+        document.addEventListener('touchstart', onGesture, { signal, passive: true });
+        // wheel fires synchronously in the user-gesture callstack on desktop Chrome/Firefox
+        document.addEventListener('wheel',      onGesture, { signal, passive: true });
       });
   }
 }
