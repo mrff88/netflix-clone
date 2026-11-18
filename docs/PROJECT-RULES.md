@@ -8,6 +8,7 @@
 │ ├── reset.css
 │ ├── variables.css
 │ ├── layout.css
+│ ├── intro.css # Fullscreen Netflix intro / loading animation (N ribbon, crimson zoom, fade-out)
 │ ├── views.css # Tab switching for Episodios, Protagonistas, Carta Final
 │ └── modal-slider.css # Episode modal and 16:9 photo carousel
 ├── js/
@@ -37,6 +38,12 @@
 ## Coding Standards
 
 - **Zero Dependencies:** Use only native HTML5, CSS3, and Vanilla ES6+ JS. Do not include Tailwind, Bootstrap, Swiper, or jQuery.
+- **Netflix Cold-Start Intro Animation:**
+  - On initial page load, display a cinematic full-screen Netflix intro / loading animation.
+  - Implement using pure CSS3 keyframe animations and semantic SVG/HTML (zero video files or heavy external animation libraries).
+  - Features the iconic Netflix crimson (`#E50914`) "N" ribbon / "NUESTRA HISTORIA" typography zoom, light beam flare, and smooth dissolution (~2.5–3 seconds).
+  - Automatically fades out to unveil the Top Navbar and Hero Billboard, with support for user dismissal on click or `Escape` key.
+  - Respects `prefers-reduced-motion` media queries by bypassing animations and displaying the UI immediately.
 - **Dynamic Media Support (2–7 Items):** Carousels dynamically adapt to between 2 and 7 media items per episode. The slide counter (`X / N`) and pagination dots must generate dynamically according to the episode's media array length.
 - **Mixed Media Support (WebP & MP4):**
   - Slides can render either `<img>` (standardized 16:9 WebP) or native `<video>` (`.mp4`) tags with `controls` and `playsinline`.
