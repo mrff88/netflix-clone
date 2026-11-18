@@ -1,0 +1,560 @@
+/**
+ * views.css - Section Views (Episodios, Protagonistas, Carta Final)
+ * Karla & Jimmy Netflix Tribute
+ * Reference: docs/PRD-specifications.md Section 3
+ */
+
+/* ==========================================================================
+   VIEW 1: EPISODIOS (HOME BILLBOARD & GRID)
+   ========================================================================== */
+
+/* Hero Billboard */
+.hero-billboard {
+  position: relative;
+  width: 100%;
+  height: 85vh;
+  min-height: 520px;
+  max-height: 820px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 4% 64px;
+  overflow: hidden;
+  background-color: var(--color-canvas);
+}
+
+.hero-backdrop-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  z-index: 1;
+}
+
+/* Multi-Directional Dark Vignettes */
+.hero-vignette-bottom {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, var(--color-canvas) 0%, rgba(20, 20, 20, 0.8) 25%, transparent 60%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-vignette-left {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(20, 20, 20, 0.95) 0%, rgba(20, 20, 20, 0.6) 35%, transparent 75%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-vignette-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 160px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, transparent 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Hero Content */
+.hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero-series-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.hero-n-mark {
+  color: var(--color-crimson);
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 0 10px var(--color-crimson-glow);
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #e5e5e5;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+/* Netflix Primary CTA */
+.btn-primary-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.btn-primary-play:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.03);
+}
+
+/* Netflix Secondary Glass CTA */
+.btn-secondary-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: rgba(109, 109, 110, 0.7);
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 12px 26px;
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-secondary-info:hover {
+  background-color: rgba(109, 109, 110, 0.45);
+  transform: scale(1.03);
+}
+
+/* Season Selector Section */
+.season-selector-wrapper {
+  padding: 24px 4% 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-card);
+  margin-bottom: 28px;
+}
+
+.season-selector-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.season-dropdown-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.season-select-pill {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px 36px 8px 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.season-select-pill:hover,
+.season-select-pill:focus {
+  border-color: var(--border-hover);
+  background-color: var(--color-surface-hover);
+}
+
+/* 16-Episode Responsive Grid */
+.episodes-grid-section {
+  padding: 0 4%;
+  margin-bottom: 60px;
+}
+
+.episodes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1100px) {
+  .episodes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .episodes-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Episode Card */
+.episode-card {
+  background-color: var(--color-elevated);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.episode-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-card);
+}
+
+.episode-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--aspect-16-9);
+  background-color: #0d0d0d;
+  overflow: hidden;
+}
+
+.episode-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.episode-card:hover .episode-card-img {
+  transform: scale(1.05);
+}
+
+.episode-card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.episode-card-media-count {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: var(--color-text-secondary);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.episode-card-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.episode-card-meta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-crimson);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.episode-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.episode-card-desc {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.episode-card-cta {
+  margin-top: auto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-crimson);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap var(--transition-fast);
+}
+
+.episode-card:hover .episode-card-cta {
+  gap: 8px;
+}
+
+/* ==========================================================================
+   VIEW 2: PROTAGONISTAS (SPOTLIGHT EDITORIAL)
+   ========================================================================== */
+.view-protagonistas-container {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: calc(var(--header-height) + 40px) 4% 80px;
+}
+
+.section-editorial-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-editorial-badge {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-crimson);
+  margin-bottom: 8px;
+}
+
+.section-editorial-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-bottom: 10px;
+}
+
+.section-editorial-desc {
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.protagonistas-showcase {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+@media (max-width: 900px) {
+  .protagonistas-showcase {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.protagonista-card {
+  background-color: var(--color-elevated);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.protagonista-card:hover {
+  border-color: var(--border-crimson);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 20px var(--color-crimson-subtle);
+}
+
+.protagonista-portrait-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 24px;
+  background-color: #0d0d0d;
+}
+
+.protagonista-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  transition: transform var(--transition-slow);
+}
+
+.protagonista-card:hover .protagonista-img {
+  transform: scale(1.03);
+}
+
+.protagonista-role-tag {
+  display: inline-block;
+  align-self: flex-start;
+  background-color: var(--color-crimson);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.protagonista-name {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.protagonista-subtitle {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  margin-bottom: 20px;
+}
+
+.protagonista-paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.protagonista-paragraphs p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #d1d1d1;
+}
+
+/* ==========================================================================
+   VIEW 3: CARTA FINAL (CINEMA READER)
+   ========================================================================== */
+.view-carta-container {
+  max-width: var(--max-reader-width);
+  margin: 0 auto;
+  padding: calc(var(--header-height) + 50px) 24px 100px;
+}
+
+.carta-cinema-stage {
+  position: relative;
+  background: radial-gradient(circle at top center, #1e1313 0%, var(--color-elevated) 45%, #101010 100%);
+  border: 1px solid var(--border-crimson);
+  border-radius: var(--radius-lg);
+  padding: clamp(32px, 6vw, 64px);
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.9), 0 0 30px var(--color-crimson-subtle);
+}
+
+.carta-header {
+  text-align: center;
+  margin-bottom: 36px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 28px;
+}
+
+.carta-badge {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: var(--color-crimson);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.carta-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-text-primary);
+}
+
+.carta-body {
+  font-family: var(--font-serif);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.carta-salutation {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.carta-paragraph {
+  font-size: 1.12rem;
+  line-height: 1.85;
+  color: #e2e2e2;
+}
+
+.carta-signature {
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.carta-sign-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.carta-sign-role {
+  font-size: 1rem;
+  color: var(--color-crimson);
+  font-style: italic;
+  margin-top: 2px;
+}

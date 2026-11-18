@@ -1,0 +1,359 @@
+/**
+ * modal-slider.css - Episode Detail Modal & 16:9 Media Carousel
+ * Karla & Jimmy Netflix Tribute
+ * Reference: docs/PRD-specifications.md Section 3.2
+ */
+
+/* ==========================================================================
+   Episode Detail Modal Shell
+   ========================================================================== */
+#episode-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+}
+
+#episode-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  max-height: 92vh;
+  background-color: var(--color-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-modal);
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.96) translateY(12px);
+  transition: transform var(--transition-normal);
+}
+
+#episode-modal.is-open .modal-dialog {
+  transform: scale(1) translateY(0);
+}
+
+/* Close Modal Button */
+.modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.75);
+  border: 1px solid var(--border-subtle);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.modal-close-btn:hover {
+  background-color: #ffffff;
+  color: #000000;
+  transform: scale(1.08);
+}
+
+.modal-close-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ==========================================================================
+   16:9 Carousel Stage
+   ========================================================================== */
+.modal-slider-container {
+  width: 100%;
+  position: relative;
+  background-color: #000000;
+}
+
+.slider-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--aspect-16-9);
+  overflow: hidden;
+  user-select: none;
+  background-color: #000000;
+}
+
+.slider-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 380ms cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.slider-slide {
+  min-width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.media-aspect-ratio {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #050505;
+}
+
+.slider-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.slider-slide video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #000000;
+  display: block;
+}
+
+/* Fallback Card for Missing or Broken Images */
+.fallback-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #241113 0%, #120506 60%, #080303 100%);
+  border: 1px dashed var(--border-crimson);
+  padding: 24px;
+  text-align: center;
+}
+
+.fallback-year {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--color-crimson);
+  margin-bottom: 4px;
+}
+
+.fallback-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  max-width: 480px;
+  margin-bottom: 8px;
+}
+
+.fallback-hint {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* Slider Left/Right Chevrons */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(18, 18, 18, 0.7);
+  border: 1px solid var(--border-subtle);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.slider-arrow:hover {
+  background-color: rgba(229, 9, 20, 0.85);
+  border-color: var(--color-crimson);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.slider-arrow-prev {
+  left: 16px;
+}
+
+.slider-arrow-next {
+  right: 16px;
+}
+
+.slider-arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Dynamic Slide Counter (X / N) */
+.slider-counter {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 4;
+  background: rgba(14, 14, 14, 0.75);
+  border: 1px solid var(--border-subtle);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Dynamic Pagination Dots */
+.slider-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 10, 10, 0.6);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.slider-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: width var(--transition-normal), background-color var(--transition-normal), border-radius var(--transition-normal);
+}
+
+.slider-dot:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.slider-dot.active {
+  width: 22px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-crimson);
+  box-shadow: 0 0 8px var(--color-crimson-glow);
+}
+
+/* ==========================================================================
+   Bottom Narrative Panel
+   ========================================================================== */
+.modal-narrative-panel {
+  padding: 28px 36px 36px;
+  background-color: var(--color-elevated);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.modal-narrative-header {
+  margin-bottom: 18px;
+}
+
+.modal-episode-badge {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--color-crimson);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.modal-episode-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1.25;
+}
+
+.modal-episode-paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.modal-episode-paragraphs p {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #d8d8d8;
+}
+
+.modal-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 20px;
+}
+
+.btn-next-episode {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--border-subtle);
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-next-episode:hover {
+  background-color: var(--color-crimson);
+  border-color: var(--color-crimson);
+  transform: translateX(3px);
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+  .modal-narrative-panel {
+    padding: 20px 20px 28px;
+  }
+
+  .modal-episode-title {
+    font-size: 1.3rem;
+  }
+
+  .modal-episode-paragraphs p {
+    font-size: 0.95rem;
+  }
+
+  .slider-arrow {
+    width: 38px;
+    height: 38px;
+  }
+}

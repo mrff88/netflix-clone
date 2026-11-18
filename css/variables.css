@@ -1,0 +1,68 @@
+/**
+ * variables.css - Design Tokens & Custom Properties
+ * Karla & Jimmy Netflix Tribute
+ * Reference: docs/PRD-specifications.md Section 1
+ */
+
+:root {
+  /* Color Palette - Cinematic Dark Mode */
+  --color-canvas: #141414;
+  --color-elevated: #181818;
+  --color-surface: #222222;
+  --color-surface-hover: #2f2f2f;
+  --color-surface-active: #383838;
+  
+  /* Netflix Crimson Brand Accents */
+  --color-crimson: #E50914;
+  --color-crimson-hover: #f40612;
+  --color-crimson-subtle: rgba(229, 9, 20, 0.15);
+  --color-crimson-glow: rgba(229, 9, 20, 0.45);
+  
+  /* Text & Metadata */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #A3A3A3;
+  --color-text-muted: #737373;
+  --color-text-inverse: #141414;
+
+  /* Borders & Glass Dividers */
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-card: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.25);
+  --border-crimson: rgba(229, 9, 20, 0.5);
+
+  /* Typography */
+  --font-sans: 'Inter', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
+
+  /* Shadows */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.6);
+  --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.95);
+  --shadow-crimson-glow: 0 0 30px rgba(229, 9, 20, 0.35);
+
+  /* Border Radii */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-normal: 250ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 400ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-smooth: 500ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Aspect Ratios & Dimensions */
+  --aspect-16-9: 16 / 9;
+  --header-height: 68px;
+  --max-content-width: 1400px;
+  --max-reader-width: 760px;
+
+  /* Z-Index Hierarchy */
+  --z-base: 1;
+  --z-nav: 100;
+  --z-toast: 500;
+  --z-modal: 1000;
+  --z-intro: 2000;
+}

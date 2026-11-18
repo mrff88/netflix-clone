@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Una Historia que Dios Nunca Dejó de Escribir | Karla & Jimmy</title>
+  
+  <meta name="description" content="Una historia de amor, fe y perseverancia a través de 16 episodios (2011–2026). Un tributo interactivo estilo Netflix para Karla Fiorella & Jimmy Stalin Rojas." />
+  <meta name="theme-color" content="#141414" />
+
+  <!-- Open Graph / Social Metadata -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Una Historia que Dios Nunca Dejó de Escribir | Karla & Jimmy" />
+  <meta property="og:description" content="Una historia de amor, fe y perseverancia a través de 16 episodios (2011–2026)." />
+  <meta property="og:image" content="assets/hero/cover.webp" />
+
+  <!-- Preconnect Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+
+  <!-- Preload Critical Banner Image -->
+  <link rel="preload" as="image" href="assets/hero/cover.webp" type="image/webp" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/intro.css" />
+  <link rel="stylesheet" href="css/views.css" />
+  <link rel="stylesheet" href="css/modal-slider.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       Netflix Cold-Start Intro Animation Overlay
+       ======================================================================== -->
+  <aside id="intro-overlay" role="presentation" aria-label="Intro cinemática de Netflix">
+    <div class="intro-stage">
+      <div class="intro-glow-beam" aria-hidden="true"></div>
+      
+      <!-- Netflix Ribbon "N" Emblem -->
+      <div class="intro-n-logo" aria-hidden="true">
+        <div class="n-leg-left"></div>
+        <div class="n-diagonal"></div>
+        <div class="n-leg-right"></div>
+      </div>
+
+      <div class="intro-title">NUESTRA HISTORIA</div>
+      <div class="intro-subtitle">Karla & Jimmy • 2011 – 2026</div>
+    </div>
+    <div class="intro-skip-hint">Haz clic en cualquier lugar para comenzar</div>
+  </aside>
+
+  <!-- ========================================================================
+       Sticky Top Navigation Bar
+       ======================================================================== -->
+  <header class="top-navbar" role="banner">
+    <div class="navbar-left">
+      <a href="#/episodios" class="brand-logo" aria-label="Ir a Episodios">
+        <span class="brand-n-badge" aria-hidden="true">N</span>
+        <span class="brand-text">NUESTRA HISTORIA</span>
+      </a>
+
+      <nav class="nav-tabs" role="tablist" aria-label="Navegación principal">
+        <a href="#/episodios" class="nav-tab-link active" role="tab" aria-selected="true">Episodios</a>
+        <a href="#/protagonistas" class="nav-tab-link" role="tab" aria-selected="false">Protagonistas</a>
+        <a href="#/carta-final" class="nav-tab-link" role="tab" aria-selected="false">Carta Final</a>
+      </nav>
+    </div>
+
+    <div class="navbar-right">
+      <button id="audio-toggle" class="audio-toggle-btn" type="button" aria-label="Reproducir música ambiental">
+        <span class="audio-icon" aria-hidden="true">🔇</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       Main Application Views
+       ======================================================================== -->
+  <main id="app-main">
+
+    <!-- View 1: Episodios (Default) -->
+    <section id="view-episodios" class="view-section active" role="tabpanel" aria-label="Episodios">
+      <!-- Hero Billboard injected by renderer.js -->
+      <header id="hero-section"></header>
+
+      <!-- Season Selector Bar injected by renderer.js -->
+      <nav id="season-selector-section" aria-label="Selector de temporada"></nav>
+
+      <!-- 16-Episode Responsive Grid -->
+      <section class="episodes-grid-section" aria-label="Lista de episodios">
+        <div id="episodes-grid" class="episodes-grid"></div>
+      </section>
+    </section>
+
+    <!-- View 2: Protagonistas (Character Spotlight) -->
+    <section id="view-protagonistas" class="view-section" role="tabpanel" aria-label="Protagonistas">
+      <div id="protagonistas-content"></div>
+    </section>
+
+    <!-- View 3: Carta Final (Cinema Reading Room) -->
+    <section id="view-carta-final" class="view-section" role="tabpanel" aria-label="Carta Final">
+      <div id="carta-content"></div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       Site Footer
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p class="footer-quote">"Una Historia que Dios Nunca Dejó de Escribir"</p>
+      <p class="footer-meta">Karla Fiorella & Jimmy Stalin Rojas • Temporada 1 • Hecho con <span class="footer-heart" aria-label="amor">❤️</span> para toda la vida</p>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       Episode Detail Modal Dialog (16:9 Media Carousel & Narrative)
+       ======================================================================== -->
+  <div id="episode-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Detalle del episodio">
+    <div class="modal-dialog">
+      <button id="modal-close-btn" class="modal-close-btn" type="button" aria-label="Cerrar modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- 16:9 Media Stage injected by EpisodeSlider -->
+      <div id="modal-slider-stage" class="modal-slider-container"></div>
+
+      <!-- Narrative & Next Button injected by renderer.js -->
+      <div id="modal-narrative" class="modal-narrative-panel"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Toast Notification Container (Season 2 Teaser)
+       ======================================================================== -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- Background Ambient Audio -->
+  <audio id="bg-music" src="assets/audio/ambient.mp3" loop preload="metadata"></audio>
+
+  <!-- Application Script Module -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
