@@ -86,9 +86,14 @@ export function unlockAudio() {
   if (primePromise !== undefined) {
     primePromise
       .then(() => {
-        audioElement.pause();
-        audioElement.currentTime = 0;
-        audioElement.muted = false;
+        // Only clean up the prime if playAudio() hasn't already taken over.
+        // If playAudio() ran concurrently it set muted=false — in that case the audio
+        // is legitimately playing and we must NOT pause it.
+        if (audioElement.muted) {
+          audioElement.pause();
+          audioElement.currentTime = 0;
+          audioElement.muted = false;
+        }
         isAudioUnlocked = true;
       })
       .catch(() => {

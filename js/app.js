@@ -10,7 +10,7 @@
  */
 
 import { SERIES_DATA } from './data.js';
-import { initAudio, playAudio, unlockAudio } from './audio.js';
+import { initAudio, playAudio } from './audio.js';
 import { EpisodeSlider } from './slider.js';
 import {
   renderHero,
@@ -82,13 +82,8 @@ function setupIntroOverlay() {
     return;
   }
 
-  // Pre-unlock audio on any initial touch or click during the intro
-  const handleEarlyInteraction = () => {
-    unlockAudio();
-  };
-  document.addEventListener('click', handleEarlyInteraction, { once: true });
-  document.addEventListener('touchend', handleEarlyInteraction, { once: true });
-  document.addEventListener('keydown', handleEarlyInteraction, { once: true });
+  // No early-interaction prime needed: playAudio() handles its own retry via
+  // fallback gesture listeners (wheel, click, keydown, touchend) if autoplay is blocked.
 
   const dismissIntro = () => {
     if (isIntroDismissed) return;
@@ -113,8 +108,11 @@ function setupIntroOverlay() {
   const autoDismissTimer = setTimeout(dismissIntro, 2800);
 
   // Click or touch to skip immediately and start audio
+  // Note: do NOT call unlockAudio() here — playAudio() (called inside dismissIntro)
+  // already runs inside this gesture callstack, so the browser allows it directly.
+  // Calling unlockAudio() concurrently starts a competing muted-prime play that would
+  // race with playAudio() and could pause the real playback in its .then() callback.
   introOverlay.addEventListener('click', () => {
-    unlockAudio();
     clearTimeout(autoDismissTimer);
     dismissIntro();
   });
@@ -122,7 +120,6 @@ function setupIntroOverlay() {
   // Keyboard shortcut to skip
   window.addEventListener('keydown', (e) => {
     if (!isIntroDismissed && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) {
-      unlockAudio();
       clearTimeout(autoDismissTimer);
       dismissIntro();
     }
