@@ -10,7 +10,7 @@
  */
 
 import { SERIES_DATA } from './data.js';
-import { initAudio } from './audio.js';
+import { initAudio, playAudio, unlockAudio } from './audio.js';
 import { EpisodeSlider } from './slider.js';
 import {
   renderHero,
@@ -76,22 +76,45 @@ function initApp() {
  */
 function setupIntroOverlay() {
   const introOverlay = document.getElementById('intro-overlay');
-  if (!introOverlay) return;
+  if (!introOverlay) {
+    // If intro overlay is not present, start audio immediately
+    playAudio();
+    return;
+  }
+
+  // Pre-unlock audio on any initial touch or click during the intro
+  const handleEarlyInteraction = () => {
+    unlockAudio();
+  };
+  document.addEventListener('click', handleEarlyInteraction, { once: true });
+  document.addEventListener('touchend', handleEarlyInteraction, { once: true });
+  document.addEventListener('keydown', handleEarlyInteraction, { once: true });
 
   const dismissIntro = () => {
     if (isIntroDismissed) return;
     isIntroDismissed = true;
     introOverlay.classList.add('is-dismissed');
+
+    // Start background audio right when the Netflix logo finishes/dismisses
+    playAudio();
+
     setTimeout(() => {
       introOverlay.remove();
     }, 750);
   };
 
-  // Auto-dismiss after 2.8 seconds
+  // Immediate start if user prefers reduced motion
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    dismissIntro();
+    return;
+  }
+
+  // Auto-dismiss after 2.8 seconds (when the logo animation finishes)
   const autoDismissTimer = setTimeout(dismissIntro, 2800);
 
-  // Click or touch to skip immediately
+  // Click or touch to skip immediately and start audio
   introOverlay.addEventListener('click', () => {
+    unlockAudio();
     clearTimeout(autoDismissTimer);
     dismissIntro();
   });
@@ -99,6 +122,7 @@ function setupIntroOverlay() {
   // Keyboard shortcut to skip
   window.addEventListener('keydown', (e) => {
     if (!isIntroDismissed && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) {
+      unlockAudio();
       clearTimeout(autoDismissTimer);
       dismissIntro();
     }

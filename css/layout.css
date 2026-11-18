@@ -146,6 +146,23 @@ body {
   border-color: var(--border-crimson);
 }
 
+.audio-toggle-btn.needs-interaction {
+  border-color: var(--color-crimson);
+  animation: audioPulse 1.8s infinite ease-in-out;
+  box-shadow: 0 0 16px var(--color-crimson-glow);
+}
+
+@keyframes audioPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 8px var(--color-crimson-glow);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px var(--color-crimson);
+  }
+}
+
 /* Equalizer Animation */
 .audio-equalizer {
   display: flex;
@@ -215,6 +232,57 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   Autoplay Fallback Audio Prompt Banner
+   ========================================================================== */
+.audio-prompt-banner {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  z-index: var(--z-toast);
+  background: rgba(229, 9, 20, 0.95);
+  color: #ffffff;
+  padding: 12px 26px;
+  border-radius: var(--radius-pill);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 24px var(--color-crimson-glow);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: transform var(--transition-normal), opacity var(--transition-normal), visibility var(--transition-normal);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.audio-prompt-banner:hover {
+  background: #f40612;
+  transform: translateX(-50%) translateY(0) scale(1.03);
+}
+
+.audio-prompt-banner.is-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
+  animation: promptFloat 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes promptFloat {
+  0% {
+    transform: translateX(-50%) translateY(0);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 16px var(--color-crimson-glow);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.9), 0 0 28px var(--color-crimson);
   }
 }
 

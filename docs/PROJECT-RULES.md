@@ -49,6 +49,6 @@
   - Slides can render either `<img>` (standardized 16:9 WebP) or native `<video>` (`.mp4`) tags with `controls` and `playsinline`.
   - When an episode video is played, the ambient background audio must automatically pause/duck. When the video pauses, ends, or the slide advances, ambient audio resumes.
 - **Image & Media Fallback Resilience:** Attach an `onerror` handler on `<img>` elements that swaps missing or broken images for a styled SVG/CSS fallback card showing the episode year and title. For broken video sources, render a fallback card.
-- **Audio Autoplay & Interaction Lifecycle:** Background ambient music starts playback on the user's first click or touch gesture anywhere on the viewport, adhering to browser autoplay policies while maintaining state sync with the navbar mute button.
+- **Audio Autoplay & Interaction Lifecycle:** Background ambient music starts playing automatically when the Netflix cold-start intro animation finishes (either at the end of the ~2.8s sequence or upon user dismissal), adhering to browser autoplay policies while maintaining state sync with the navbar mute button.
 - **Hash-Based Navigation & Modals:** URL hash tracks active tabs (`#/episodios`, `#/protagonistas`, `#/carta-final`) and episode modal state (`#/episodio-1` to `#/episodio-16`). Native browser Back button navigation triggers `hashchange` to synchronize open/close states.
 - **Clean Separation:** Keep all text, media types, and file paths inside `js/data.js`. Never hardcode episode copy or media paths in `index.html`.

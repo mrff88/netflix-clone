@@ -2,25 +2,33 @@
  * audio.js - Ambient Background Audio Controller
  * Karla & Jimmy Netflix Tribute
  *
- * Responsibilities:
- * - Autoplay ambient music on first user click/touch anywhere on the document.
- * - Manage mute/unmute and play/pause toggle in the top navbar.
- * - Audio ducking: pause ambient music when an episode video plays, resume when stopped.
- * - Synchronize UI button icon (🔇 / 🔊) and equalizer visual states.
+ * Capabilities:
+ * - Robust audio unlocking compliant with Safari & Chrome Autoplay Policies.
+ * - Handles 'click', 'touchend', and 'keydown' (avoiding rejected pointerdown in WebKit).
+ * - Preloads audio with 'preload=auto' for zero buffering latency.
+ * - Shows an interactive banner fallback if unprompted autoplay is blocked by the browser.
+ * - Audio ducking during episode video playback.
  */
 
 let audioElement = null;
 let audioToggleButton = null;
+let audioPromptBanner = null;
 let isAudioInitialized = false;
 let userMutedExplicitly = false;
 let pausedByVideo = false;
+let isAudioUnlocked = false;
 
 /**
- * Initialize audio system and register interaction listeners.
+ * Initialize audio system.
  * @param {string} audioSrc - Relative or absolute path to ambient.mp3
  * @param {string} toggleBtnSelector - CSS selector for the navbar toggle button
+ * @param {string} promptBannerSelector - CSS selector for the autoplay fallback banner
  */
-export function initAudio(audioSrc = 'assets/audio/ambient.mp3', toggleBtnSelector = '#audio-toggle') {
+export function initAudio(
+  audioSrc = 'assets/audio/ambient.mp3',
+  toggleBtnSelector = '#audio-toggle',
+  promptBannerSelector = '#audio-prompt-banner'
+) {
   if (isAudioInitialized) return;
 
   // Locate or create the audio element
@@ -30,9 +38,18 @@ export function initAudio(audioSrc = 'assets/audio/ambient.mp3', toggleBtnSelect
     audioElement.id = 'bg-music';
     audioElement.src = audioSrc;
     audioElement.loop = true;
-    audioElement.preload = 'metadata';
+    audioElement.preload = 'auto';
+    audioElement.setAttribute('playsinline', '');
+    audioElement.setAttribute('webkit-playsinline', '');
     document.body.appendChild(audioElement);
+  } else {
+    audioElement.preload = 'auto';
+    audioElement.setAttribute('playsinline', '');
+    audioElement.setAttribute('webkit-playsinline', '');
   }
+
+  // Preload audio buffer immediately
+  audioElement.load();
 
   audioToggleButton = document.querySelector(toggleBtnSelector);
   if (audioToggleButton) {
@@ -42,26 +59,49 @@ export function initAudio(audioSrc = 'assets/audio/ambient.mp3', toggleBtnSelect
     });
   }
 
-  // First-interaction autoplay: Trigger audio upon first click/tap anywhere on viewport
-  const handleFirstInteraction = () => {
-    if (!userMutedExplicitly && audioElement && audioElement.paused) {
+  audioPromptBanner = document.querySelector(promptBannerSelector);
+  if (audioPromptBanner) {
+    audioPromptBanner.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userMutedExplicitly = false;
       playAudio();
-    }
-  };
-
-  // 'pointerdown' captures touches and clicks with lowest latency
-  document.addEventListener('pointerdown', handleFirstInteraction, { once: true });
-  document.addEventListener('keydown', handleFirstInteraction, { once: true });
+    });
+  }
 
   isAudioInitialized = true;
   updateAudioUI();
 }
 
 /**
- * Play ambient music with browser promise error handling.
+ * Pre-unlock audio element inside an active user gesture (click/touchend/keydown).
+ * This primes the browser to allow unmuted playback when the animation ends.
+ */
+export function unlockAudio() {
+  if (!audioElement || isAudioUnlocked) return;
+
+  // Priming play/pause within user gesture callstack
+  audioElement.muted = true;
+  const primePromise = audioElement.play();
+
+  if (primePromise !== undefined) {
+    primePromise
+      .then(() => {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+        audioElement.muted = false;
+        isAudioUnlocked = true;
+      })
+      .catch(() => {
+        audioElement.muted = false;
+      });
+  }
+}
+
+/**
+ * Play ambient music with browser promise error handling and interactive fallback.
  */
 export function playAudio() {
-  if (!audioElement) return;
+  if (!audioElement || userMutedExplicitly) return;
 
   audioElement.muted = false;
   const playPromise = audioElement.play();
@@ -69,12 +109,35 @@ export function playAudio() {
   if (playPromise !== undefined) {
     playPromise
       .then(() => {
+        isAudioUnlocked = true;
+        hideAudioPrompt();
         updateAudioUI();
       })
       .catch((err) => {
-        // Autoplay policy or media not loaded yet
-        console.warn('Audio playback waiting for eligible user gesture:', err.message);
+        // Browser autoplay restriction: unprompted playback was blocked
+        console.warn('Autoplay blocked by browser policy:', err.message);
+        showAudioPrompt();
         updateAudioUI();
+
+        // Listen for next user gesture across the document
+        const handleGesture = () => {
+          if (!userMutedExplicitly && audioElement && audioElement.paused) {
+            audioElement.muted = false;
+            audioElement
+              .play()
+              .then(() => {
+                isAudioUnlocked = true;
+                hideAudioPrompt();
+                updateAudioUI();
+              })
+              .catch(() => {});
+          }
+        };
+
+        // Use 'click' and 'touchend' - universally accepted across WebKit/Safari and Blink/Chrome
+        document.addEventListener('click', handleGesture, { once: true });
+        document.addEventListener('touchend', handleGesture, { once: true });
+        document.addEventListener('keydown', handleGesture, { once: true });
       });
   }
 }
@@ -85,6 +148,7 @@ export function playAudio() {
 export function pauseAudio() {
   if (!audioElement) return;
   audioElement.pause();
+  hideAudioPrompt();
   updateAudioUI();
 }
 
@@ -127,6 +191,30 @@ export function resumeAudioAfterMedia() {
 }
 
 /**
+ * Show floating audio prompt if autoplay is blocked by browser
+ */
+function showAudioPrompt() {
+  if (audioPromptBanner && !userMutedExplicitly) {
+    audioPromptBanner.classList.add('is-visible');
+  }
+  if (audioToggleButton) {
+    audioToggleButton.classList.add('needs-interaction');
+  }
+}
+
+/**
+ * Hide floating audio prompt once audio begins
+ */
+function hideAudioPrompt() {
+  if (audioPromptBanner) {
+    audioPromptBanner.classList.remove('is-visible');
+  }
+  if (audioToggleButton) {
+    audioToggleButton.classList.remove('needs-interaction');
+  }
+}
+
+/**
  * Synchronize UI indicators (button emoji/label and equalizer animation).
  */
 export function updateAudioUI() {
@@ -136,6 +224,7 @@ export function updateAudioUI() {
 
   if (isPlaying) {
     audioToggleButton.classList.add('is-playing');
+    audioToggleButton.classList.remove('needs-interaction');
     audioToggleButton.setAttribute('aria-label', 'Silenciar música ambiental');
     audioToggleButton.innerHTML = `
       <span class="audio-icon" aria-hidden="true">🔊</span>

@@ -28,9 +28,9 @@
      - Keyframe scale-up, glowing light streak beam, and smooth dissolution (~2.5–3.0s duration).
      - Smooth opacity fade-out unveils the Sticky Top Navbar and Hero Billboard.
    - **Interaction & Audio Trigger:**
-     - Auto-dismisses seamlessly when the animation completes.
+     - Auto-dismisses seamlessly when the animation completes (~2.8s).
      - Click anywhere or press `Escape`/`Enter` to skip immediately.
-     - Clicking anywhere on this splash fulfills the browser gesture requirement, starting ambient background audio.
+     - Ambient background audio begins playback the exact moment the Netflix logo intro animation finishes (or upon user dismissal).
    - **Accessibility:** Honors `prefers-reduced-motion` by bypassing the animation sequence and revealing the application immediately.
 1. **Episodios View (Home):**
    - **Hero Billboard:** Full-bleed widescreen backdrop (`assets/hero/cover.webp`), bottom/left dark vignette gradients, `N SERIE ORIGINAL` badge, title _"Una Historia que Dios Nunca Dejó de Escribir"_, subtitle _"Karla & Jimmy • 2011 – 2026 • 16 Episodios"_, primary CTA `▶ Ver Episodio 1`, and secondary CTA `✉ Leer Carta Final` (switches to `Carta Final` tab).
@@ -51,5 +51,5 @@
 ## 4. Audio Specifications
 
 - `<audio id="bg-music" src="assets/audio/ambient.mp3" loop preload="metadata"></audio>`
-- **First-Interaction Autoplay:** To comply with browser autoplay policies while maintaining cinematic immersion, background audio begins playing on the user's first click or touch interaction anywhere on the screen.
+- **Post-Intro Autoplay:** Ambient background audio begins playback the moment the Netflix cold-start intro animation completes (or upon user dismissal). If blocked by browser autoplay policies, playback seamlessly begins upon the user's first subsequent gesture.
 - **Controls & Video Ducking:** Clicking the navbar audio button toggles playback. If an episode video is played, background audio is automatically paused, and automatically resumed once the video stops or slide changes.

@@ -16,14 +16,14 @@ We are building a public, interactive Netflix-style single-page web application 
    - All episode media is organized into year-named folders (`assets/episodes/2011/` through `assets/episodes/2026/`), containing between **2 to 7 media items** per year.
    - Images are standardized to uniform dimensions (recommended `1600x900px` 16:9 WebP). Episodes may also contain MP4 video clips (e.g., `assets/episodes/2014/02.mp4`), rendered via `<video controls playsinline>`.
    - When a video plays inside the modal slider, ambient background music automatically pauses, resuming when the video ends or pauses.
-   - `assets/audio/ambient.mp3` provides background music initiated on the user's first click or tap anywhere on the screen, adhering to modern browser autoplay policies.
+   - `assets/audio/ambient.mp3` provides background music initiated when the Netflix cold-start intro finishes, adhering to modern browser autoplay policies.
 6. **Navigation & Modal State Management:**
    - View tabs (`#/episodios`, `#/protagonistas`, `#/carta-final`) and episode detail modals (`#/episodio-1` through `#/episodio-16`) are driven by URL hash routing.
    - Listening to `hashchange` enables deep linking and allows native browser Back/Forward buttons to navigate between views or dismiss active modals cleanly.
-7. **Cold-Load Cinematic Intro Sequence:**
+8. **Cold-Load Cinematic Intro Sequence & Audio Trigger:**
    - To deliver the authentic Netflix streaming atmosphere, the application boots with a zero-dependency CSS3/SVG intro loading animation.
-   - Pure CSS keyframe ribbon zoom and fade-out keeps cold-load latency zero, avoids bulky video files, and transitions smoothly into the Hero Billboard after ~2.5s.
-   - An interaction (click to skip or continue) organically fulfills the browser's autoplay gesture requirement for background ambient audio.
+   - Pure CSS keyframe ribbon zoom and fade-out keeps cold-load latency zero, avoids bulky video files, and transitions smoothly into the Hero Billboard after ~2.8s.
+   - Ambient background audio begins playback the exact moment the Netflix logo animation completes (or upon user dismissal).
 
 ## Consequences
 

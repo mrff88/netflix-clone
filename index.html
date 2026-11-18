@@ -80,7 +80,7 @@
       <div class="intro-title">NUESTRA HISTORIA</div>
       <div class="intro-subtitle">Karla & Jimmy • 2011 – 2026</div>
     </div>
-    <div class="intro-skip-hint">Haz clic en cualquier lugar para comenzar</div>
+    <div class="intro-skip-hint">Toca o haz clic en la pantalla para comenzar con música</div>
   </aside>
 
   <!-- ========================================================================
@@ -175,11 +175,18 @@
        ======================================================================== -->
   <div id="toast-container" aria-live="polite"></div>
 
-  <!-- Background Ambient Audio -->
-  <audio id="bg-music" src="assets/audio/ambient.mp3" loop preload="metadata"></audio>
+  <!-- ========================================================================
+       Autoplay Fallback Audio Banner (Visible only if browser blocked unprompted sound)
+       ======================================================================== -->
+  <aside id="audio-prompt-banner" class="audio-prompt-banner" role="button" tabindex="0" aria-label="Activar música de fondo">
+    <span class="audio-prompt-icon" aria-hidden="true">🔊</span>
+    <span class="audio-prompt-text">Haz clic aquí para activar la música</span>
+  </aside>
+
+  <!-- Background Ambient Audio (Preload Auto for immediate playback) -->
+  <audio id="bg-music" src="assets/audio/ambient.mp3" loop preload="auto" playsinline webkit-playsinline></audio>
 
   <!-- Application Script Module -->
   <script type="module" src="js/app.js"></script>
 </body>
-
 </html>
