@@ -16,7 +16,8 @@ We are building a public, interactive Netflix-style single-page web application 
    - All episode media is organized into year-named folders (`assets/episodes/2011/` through `assets/episodes/2026/`), containing between **2 to 7 media items** per year.
    - Images are standardized to uniform dimensions (recommended `1600x900px` 16:9 WebP). Episodes may also contain MP4 video clips (e.g., `assets/episodes/2014/02.mp4`), rendered via `<video controls playsinline>`.
    - When a video plays inside the modal slider, ambient background music automatically pauses, resuming when the video ends or pauses.
-   - `assets/audio/ambient.mp3` provides background music initiated when the Netflix cold-start intro finishes, adhering to modern browser autoplay policies.
+   - `assets/audio/` contains a 4-track sequential playlist (`ambient.mp3` + 3 consecutive tracks configured in `js/data.js`). The audio controller listens to the `ended` event to cycle sequentially from Track 1 to 4 and loop indefinitely without user intervention.
+   - Background music initiates when the Netflix cold-start intro finishes, adhering to modern browser autoplay policies.
 6. **Navigation & Modal State Management:**
    - View tabs (`#/episodios`, `#/protagonistas`, `#/carta-final`) and episode detail modals (`#/episodio-1` through `#/episodio-16`) are driven by URL hash routing.
    - Listening to `hashchange` enables deep linking and allows native browser Back/Forward buttons to navigate between views or dismiss active modals cleanly.

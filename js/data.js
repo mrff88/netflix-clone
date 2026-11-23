@@ -5,6 +5,13 @@ export const SERIES_DATA = {
   seasonTitle: "TEMPORADA 1: UNA HISTORIA QUE DIOS NUNCA DEJÓ DE ESCRIBIR",
   season2Teaser: "Temporada 2: En construcción... Porque nuestra historia no tiene créditos finales ❤️",
   heroImage: "assets/hero/cover.webp",
+  // 4-Track sequential ambient playlist (ambient.mp3 + 3 consecutive tracks)
+  audioPlaylist: [
+    "assets/audio/ambient.mp3",
+    "assets/audio/track2.mp3",
+    "assets/audio/track3.mp3",
+    "assets/audio/track4.mp3"
+  ],
   audioSrc: "assets/audio/ambient.mp3",
 
   episodes: [

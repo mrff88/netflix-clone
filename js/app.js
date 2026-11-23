@@ -33,8 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
  * Initialize all subsystems, renders, and event bindings.
  */
 function initApp() {
-  // 1. Initialize Audio Controller
-  initAudio(SERIES_DATA.audioSrc, '#audio-toggle');
+  // 1. Initialize Audio Controller (supports 4-track sequential playlist or single audioSrc)
+  const audioTracks = SERIES_DATA.audioPlaylist || SERIES_DATA.audioSrc;
+  initAudio(audioTracks, '#audio-toggle');
 
   // 2. Initialize Netflix Intro Overlay
   setupIntroOverlay();

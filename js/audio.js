@@ -3,8 +3,9 @@
  * Karla & Jimmy Netflix Tribute
  *
  * Capabilities:
+ * - 4-Track Sequential Playlist: plays tracks one after the other on 'ended', cycling indefinitely.
  * - Robust audio unlocking compliant with Safari & Chrome Autoplay Policies.
- * - Handles 'click', 'touchend', and 'keydown' (avoiding rejected pointerdown in WebKit).
+ * - Handles 'click', 'touchend', 'keydown', and 'wheel' for gesture recovery.
  * - Preloads audio with 'preload=auto' for zero buffering latency.
  * - Shows an interactive banner fallback if unprompted autoplay is blocked by the browser.
  * - Audio ducking during episode video playback.
@@ -17,39 +18,58 @@ let isAudioInitialized = false;
 let userMutedExplicitly = false;
 let pausedByVideo = false;
 let isAudioUnlocked = false;
+let playlist = ['assets/audio/ambient.mp3'];
+let currentTrackIndex = 0;
 
 /**
- * Initialize audio system.
- * @param {string} audioSrc - Relative or absolute path to ambient.mp3
+ * Initialize audio system with a single source or an array playlist.
+ * @param {string|string[]} audioInput - Relative or absolute paths to audio tracks
  * @param {string} toggleBtnSelector - CSS selector for the navbar toggle button
  * @param {string} promptBannerSelector - CSS selector for the autoplay fallback banner
  */
 export function initAudio(
-  audioSrc = 'assets/audio/ambient.mp3',
+  audioInput = 'assets/audio/ambient.mp3',
   toggleBtnSelector = '#audio-toggle',
   promptBannerSelector = '#audio-prompt-banner'
 ) {
   if (isAudioInitialized) return;
+
+  // Configure playlist array
+  if (Array.isArray(audioInput) && audioInput.length > 0) {
+    playlist = audioInput.filter((track) => typeof track === 'string' && track.trim().length > 0);
+  } else if (typeof audioInput === 'string' && audioInput.trim().length > 0) {
+    playlist = [audioInput.trim()];
+  }
+  if (!playlist.length) {
+    playlist = ['assets/audio/ambient.mp3'];
+  }
+  currentTrackIndex = 0;
 
   // Locate or create the audio element
   audioElement = document.getElementById('bg-music');
   if (!audioElement) {
     audioElement = document.createElement('audio');
     audioElement.id = 'bg-music';
-    audioElement.src = audioSrc;
-    audioElement.loop = true;
+    audioElement.src = playlist[0];
     audioElement.preload = 'auto';
     audioElement.setAttribute('playsinline', '');
     audioElement.setAttribute('webkit-playsinline', '');
     document.body.appendChild(audioElement);
   } else {
+    // Remove native loop attribute so the 'ended' event fires properly for playlist advance
+    audioElement.removeAttribute('loop');
+    audioElement.src = playlist[0];
     audioElement.preload = 'auto';
     audioElement.setAttribute('playsinline', '');
     audioElement.setAttribute('webkit-playsinline', '');
   }
 
-  // Preload audio buffer immediately
+  // Preload first audio buffer immediately
   audioElement.load();
+
+  // Attach playlist sequential advancement listener
+  audioElement.addEventListener('ended', onTrackEnded);
+  audioElement.addEventListener('error', onTrackError);
 
   audioToggleButton = document.querySelector(toggleBtnSelector);
   if (audioToggleButton) {
@@ -70,6 +90,69 @@ export function initAudio(
 
   isAudioInitialized = true;
   updateAudioUI();
+}
+
+/**
+ * Handle individual track completion: advances to next track in the playlist.
+ */
+function onTrackEnded() {
+  if (userMutedExplicitly || pausedByVideo) return;
+  playNextTrack();
+}
+
+/**
+ * Handle audio load/decode errors gracefully.
+ */
+function onTrackError(e) {
+  const failedSrc = playlist[currentTrackIndex];
+  console.warn(`Error loading playlist track [${currentTrackIndex}] (${failedSrc}):`, e);
+  // If track failed while active playback is expected, attempt advancing after a brief pause
+  if (!userMutedExplicitly && !pausedByVideo && playlist.length > 1) {
+    setTimeout(() => {
+      if (!userMutedExplicitly && !pausedByVideo) {
+        playNextTrack();
+      }
+    }, 1200);
+  }
+}
+
+/**
+ * Advance to and play the next track in the playlist.
+ */
+export function playNextTrack() {
+  if (!audioElement || !playlist.length) return;
+  currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+  loadAndPlayTrack(currentTrackIndex);
+}
+
+/**
+ * Load a specific track index and play if unmuted.
+ * @param {number} index
+ */
+function loadAndPlayTrack(index) {
+  if (!audioElement || !playlist.length) return;
+  currentTrackIndex = ((index % playlist.length) + playlist.length) % playlist.length;
+  audioElement.src = playlist[currentTrackIndex];
+  audioElement.load();
+
+  if (!userMutedExplicitly && !pausedByVideo) {
+    audioElement.muted = false;
+    const playPromise = audioElement.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          isAudioUnlocked = true;
+          hideAudioPrompt();
+          updateAudioUI();
+        })
+        .catch((err) => {
+          console.warn(`Autoplay restriction on track [${currentTrackIndex}] ${playlist[currentTrackIndex]}:`, err.message);
+          updateAudioUI();
+        });
+    }
+  } else {
+    updateAudioUI();
+  }
 }
 
 /**
@@ -258,3 +341,28 @@ export function updateAudioUI() {
     `;
   }
 }
+
+/**
+ * Retrieve a copy of the current playlist tracks.
+ * @returns {string[]}
+ */
+export function getPlaylist() {
+  return [...playlist];
+}
+
+/**
+ * Retrieve the current active track index.
+ * @returns {number}
+ */
+export function getCurrentTrackIndex() {
+  return currentTrackIndex;
+}
+
+/**
+ * Retrieve the current active track URL.
+ * @returns {string|null}
+ */
+export function getCurrentTrack() {
+  return playlist[currentTrackIndex] || null;
+}
+

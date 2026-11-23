@@ -50,6 +50,13 @@
 
 ## 4. Audio Specifications
 
-- `<audio id="bg-music" src="assets/audio/ambient.mp3" loop preload="metadata"></audio>`
-- **Post-Intro Autoplay:** Ambient background audio begins playback the moment the Netflix cold-start intro animation completes (or upon user dismissal). If blocked by browser autoplay policies, playback seamlessly begins upon the user's first subsequent gesture.
+- `<audio id="bg-music" src="assets/audio/ambient.mp3" preload="auto" playsinline webkit-playsinline></audio>`
+- **4-Track Ambient Sequential Playlist:**
+  - Track 1: `assets/audio/ambient.mp3` (Initial track)
+  - Track 2: `assets/audio/track2.mp3`
+  - Track 3: `assets/audio/track3.mp3`
+  - Track 4: `assets/audio/track4.mp3`
+  - All track paths are declared in `js/data.js` under `SERIES_DATA.audioPlaylist`.
+  - Sequential playback is driven by the native `ended` event: as each audio file completes, the next track is automatically loaded and played, looping back to Track 1 indefinitely.
+- **Post-Intro Autoplay:** Ambient background audio begins playback the moment the Netflix cold-start intro animation completes (or upon user dismissal). If blocked by browser autoplay policies, playback seamlessly begins upon the user's first subsequent gesture (click, keydown, touch, or desktop scroll wheel).
 - **Controls & Video Ducking:** Clicking the navbar audio button toggles playback. If an episode video is played, background audio is automatically paused, and automatically resumed once the video stops or slide changes.
