@@ -104,7 +104,7 @@ export const SERIES_DATA = {
         "assets/episodes/2016/03.webp"
       ],
       description: [
-        "Hubo un momento en que pensamos que nuestro sueño de casarnos estaba cerca. Pero la vida también nos enfrentó a dificultades. Cometí errores y nuestros caminos terminaron separándose. No fue el final de nuestra historia, aunque entonces no lo sabíamos."
+        "Hubo un momento en que pensamos que nuestro sueño de casarnos estaba cerca. Pero la vida también nos enfrentó a dificultades. Cometí errores y nuestros caminos terminaron separándose. No fue el final de nuestra historia, aunque entonces no lo sabíamos. Pero siempre estuve para ti."
       ]
     },
     {
